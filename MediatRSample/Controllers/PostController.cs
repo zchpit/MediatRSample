@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MediatRSample.Command;
 using MediatRSample.Helper;
+using MediatRSample.Notification;
 using MediatRSample.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +37,18 @@ namespace MediatRSample.Controllers
         UpdatePostCommand updatePostCommand)
         {
             await _mediator.Send(updatePostCommand);
+
+            return NoContent();
+        }
+
+        [HttpPost(Name = "WritePostNotification")]
+        public async Task<ActionResult> WritePostNotification(string message)
+        {
+            var notification = new WritePostNotification()
+            {
+                WhatToWrite = message
+            };
+            await _mediator.Publish(notification);
 
             return NoContent();
         }
